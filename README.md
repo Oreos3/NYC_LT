@@ -34,7 +34,7 @@ SELECT
     paymentType,
     puYear as year,
     puMonth as month,
-    sum(fareAmount)/2 as Mean_cost,
+    avg(fareAmount) as Mean_cost,
     percentile_cont(0.5) within group (order by fareAmount) Over
     (Partition By paymentType, puYear, puMonth) as median_cost,
     avg(totalAmount) as mean_prices,
@@ -49,5 +49,7 @@ GROUP BY paymentType, puYear, puMonth, fareAmount, totalAmount, passengerCount
 
 ## Part 3
 ## saves data in csv format on user folder on Azure databricks
+# note the dbfs location can be change as needed to run the file
+
 dataview = spark.sql(query).write.csv("dbfs:/Users/oreoluwaa200@gmail.com")
 
